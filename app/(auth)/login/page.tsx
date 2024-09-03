@@ -1,14 +1,21 @@
+import { loginAction } from "../actions";
+
 export default function LoginPage() {
   return (
     <div>
-      <form className="space-y-4">
+      <form className="space-y-4" action={loginAction}>
         <div className="space-x-2">
           <label htmlFor="email">Email</label>
-          <input type="text" id="email" placeholder="Email" />
+          <input type="text" id="email" placeholder="Email" name="email" />
         </div>
         <div className="space-x-2">
           <label htmlFor="password">Password</label>
-          <input type="password" id="password" placeholder="Password" />
+          <input
+            name="password"
+            type="password"
+            id="password"
+            placeholder="Password"
+          />
         </div>
         <button
           type="submit"
