@@ -5,11 +5,11 @@ export default function LoginPage() {
     <div>
       <form className="space-y-4" action={loginAction}>
         <div className="space-x-2">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="username">Username</label>
           <input
             type="text"
-            id="email"
-            placeholder="Email"
+            id="username"
+            placeholder="username"
             name="username"
             className="text-black"
           />
