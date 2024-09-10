@@ -5,8 +5,14 @@ export default function LoginPage() {
     <div>
       <form className="space-y-4" action={loginAction}>
         <div className="space-x-2">
-          <label htmlFor="email">Email</label>
-          <input type="text" id="email" placeholder="Email" name="email" />
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            placeholder="username"
+            name="username"
+            className="text-black"
+          />
         </div>
         <div className="space-x-2">
           <label htmlFor="password">Password</label>
@@ -14,6 +20,7 @@ export default function LoginPage() {
             name="password"
             type="password"
             id="password"
+            className="text-black"
             placeholder="Password"
           />
         </div>
