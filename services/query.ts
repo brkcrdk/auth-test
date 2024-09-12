@@ -3,39 +3,28 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-interface QueryParams {
-  endpoint: string;
-}
+async function query(endpoint: string, requestParams: RequestInit = {}) {
+  const token = cookies().get("token")?.value;
 
-async function query({ endpoint }: QueryParams) {
-  try {
-    const token = cookies().get("token")?.value;
-
-    if (!token) {
-      cookies().delete("refreshToken");
-      redirect("/login");
-    }
-
-    const response = await fetch(endpoint, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (response.status === 401) {
-      cookies().delete("token");
-      cookies().delete("refreshToken");
-      redirect("/login");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error(error);
+  if (!token) {
+    redirect("/logout");
   }
+
+  const response = await fetch(`${process.env.BASE_URL}${endpoint}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (response.status === 401) {
+    redirect("/logout");
+  }
+
+  const data = await response.json();
+
+  return data;
 }
 
 export default query;
