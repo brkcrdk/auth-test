@@ -12,6 +12,7 @@ export default function LoginPage() {
             placeholder="username"
             name="username"
             className="text-black"
+            value="emilys"
           />
         </div>
         <div className="space-x-2">
@@ -22,6 +23,7 @@ export default function LoginPage() {
             id="password"
             className="text-black"
             placeholder="Password"
+            value="emilyspass"
           />
         </div>
         <button
