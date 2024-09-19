@@ -18,12 +18,12 @@ export const loginAction = async (e: FormData) => {
   });
 
   const response: { token: string; refreshToken: string } = await res.json();
-  console.log("response", response);
   if (res.ok) {
+    console.log({ loginResponse: response.token });
+    cookies().set("token", response.token);
+    cookies().set("refreshToken", response.refreshToken);
     redirect("/");
   } else {
     console.log("Login failed");
   }
-  cookies().set("token", response.token);
-  cookies().set("refreshToken", response.refreshToken);
 };
