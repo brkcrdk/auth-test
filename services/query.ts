@@ -1,10 +1,11 @@
 "use server";
 
+import authTestConfig from "@/authTestConfig";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-async function query(endpoint: string, requestParams: RequestInit = {}) {
-  const token = cookies().get("token")?.value;
+async function query(endpoint: string) {
+  const token = cookies().get(authTestConfig.accessToken)?.value;
 
   if (!token) {
     redirect("/logout");

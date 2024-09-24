@@ -1,5 +1,6 @@
 "use server";
 
+import authTestConfig from "@/authTestConfig";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -17,11 +18,11 @@ export const loginAction = async (e: FormData) => {
     body: JSON.stringify({ username, password })
   });
 
-  const response: { token: string; refreshToken: string } = await res.json();
+  const response: { accessToken: string; refreshToken: string } = await res.json();
   if (res.ok) {
-    console.log({ loginResponse: response.token });
-    cookies().set("token", response.token);
-    cookies().set("refreshToken", response.refreshToken);
+    console.log({ loginResponse: response.accessToken });
+    cookies().set(authTestConfig.accessToken, response.accessToken);
+    cookies().set(authTestConfig.refreshToken, response.refreshToken);
     redirect("/");
   } else {
     console.log("Login failed");

@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import authTestConfig from "@/authTestConfig";
 
 interface RefreshResponseProps {
   token: string;
@@ -9,8 +10,8 @@ interface RefreshResponseProps {
 }
 
 async function mutation(endpoint: string, requestParams?: RequestInit) {
-  const token = cookies().get("token")?.value;
-  const refreshToken = cookies().get("refreshToken")?.value;
+  const token = cookies().get(authTestConfig.accessToken)?.value;
+  const refreshToken = cookies().get(authTestConfig.refreshToken)?.value;
 
   if (!refreshToken && !token) {
     redirect("/logout");
@@ -57,8 +58,8 @@ async function mutation(endpoint: string, requestParams?: RequestInit) {
       if (refreshRequest.ok) {
         const refreshResponse: RefreshResponseProps =
           await refreshRequest.json();
-        cookies().set("token", refreshResponse.token);
-        cookies().set("refreshToken", refreshResponse.refreshToken);
+        cookies().set(authTestConfig.accessToken, refreshResponse.token);
+        cookies().set(authTestConfig.refreshToken, refreshResponse.refreshToken);
         return mutation(endpoint, requestParams);
       } else {
         redirect("/logout");
