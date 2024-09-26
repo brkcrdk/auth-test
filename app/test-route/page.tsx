@@ -2,12 +2,12 @@ import Link from "next/link";
 import { Suspense } from "react";
 import Avatar from "./Avatar";
 
-function ProtectedRoute() {
+function TestRoute() {
   return (
     <>
-      <h1 className="text-white text-4xl">Protected route</h1>
-      <Link href="/test-route" className="text-white text-4xl">
-        Go to test
+      <h1 className="text-white text-4xl">TestRoute route</h1>
+      <Link href="/protected" className="text-white text-4xl">
+        Go to Protected
       </Link>
 
       <Suspense fallback="Avatar is loading">
@@ -20,4 +20,4 @@ function ProtectedRoute() {
   );
 }
 
-export default ProtectedRoute;
+export default TestRoute;

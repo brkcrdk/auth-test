@@ -33,8 +33,10 @@ async function mutation(endpoint: string, requestParams?: RequestInit) {
 
   const request = await fetch(
     `${process.env.BASE_URL}${endpoint}`,
-    computedRequestParams
+    computedRequestParams,
   );
+
+  console.log({ request });
 
   if (!request.ok && request.status !== 401) {
     redirect("/logout"); //TODO: error handling
@@ -52,14 +54,17 @@ async function mutation(endpoint: string, requestParams?: RequestInit) {
             expiresInMins: 30, // optional, defaults to 60
           }),
           credentials: "include", // Include cookies (e.g., accessToken) in the request
-        }
+        },
       );
 
       if (refreshRequest.ok) {
         const refreshResponse: RefreshResponseProps =
           await refreshRequest.json();
         cookies().set(authTestConfig.accessToken, refreshResponse.token);
-        cookies().set(authTestConfig.refreshToken, refreshResponse.refreshToken);
+        cookies().set(
+          authTestConfig.refreshToken,
+          refreshResponse.refreshToken,
+        );
         return mutation(endpoint, requestParams);
       } else {
         redirect("/logout");
@@ -67,9 +72,9 @@ async function mutation(endpoint: string, requestParams?: RequestInit) {
     } else {
       redirect("/logout");
     }
+  } else {
+    return await request.json();
   }
-
-  return await request.json();
 }
 
 export default mutation;

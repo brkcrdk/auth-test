@@ -9,6 +9,6 @@ export async function getCurrentUserMutation() {
       "demo-header-id": "123",
     },
   });
-
-  // console.log({ resp });
+  console.log(resp);
+  return resp;
 }
