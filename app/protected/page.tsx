@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import Avatar from "./Avatar";
+import GetUser from "./GetUser";
 
 function ProtectedRoute() {
   return (
@@ -9,6 +10,8 @@ function ProtectedRoute() {
       <Link href="/test-route" className="text-white text-4xl">
         Go to test
       </Link>
+
+      <GetUser />
 
       <Suspense fallback="Avatar is loading">
         <Avatar />

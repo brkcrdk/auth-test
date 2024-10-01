@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import authTestConfig from "@/authTestConfig";
 
 interface RefreshResponseProps {
-  token: string;
+  accessToken: string;
   refreshToken: string;
 }
 
@@ -36,8 +36,6 @@ async function mutation(endpoint: string, requestParams?: RequestInit) {
     computedRequestParams,
   );
 
-  console.log({ request });
-
   if (!request.ok && request.status !== 401) {
     redirect("/logout"); //TODO: error handling
   }
@@ -60,7 +58,7 @@ async function mutation(endpoint: string, requestParams?: RequestInit) {
       if (refreshRequest.ok) {
         const refreshResponse: RefreshResponseProps =
           await refreshRequest.json();
-        cookies().set(authTestConfig.accessToken, refreshResponse.token);
+        cookies().set(authTestConfig.accessToken, refreshResponse.accessToken);
         cookies().set(
           authTestConfig.refreshToken,
           refreshResponse.refreshToken,
