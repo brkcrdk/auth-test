@@ -1,13 +1,16 @@
 "use server";
 
 import authTestConfig from "@/authTestConfig";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 async function query(endpoint: string, requestInit?: RequestInit) {
-  const token = cookies().get(authTestConfig.accessToken)?.value;
+  const headerToken = headers().get(authTestConfig.accessToken);
+  const cookieToken = cookies().get(authTestConfig.accessToken)?.value;
 
-  if (!token) {
+  const computedToken = cookieToken || headerToken;
+
+  if (!computedToken) {
     redirect("/logout");
   }
 
@@ -16,14 +19,14 @@ async function query(endpoint: string, requestInit?: RequestInit) {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${computedToken}`,
       ...requestInit?.headers,
     },
   };
 
   const response = await fetch(
     `${process.env.BASE_URL}${endpoint}`,
-    computedRequestParams,
+    computedRequestParams
   );
 
   if (response.status === 401) {
