@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import createMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
 
 import authTestConfig from "./authTestConfig";
+
+const intlMiddleware = createMiddleware(routing);
 
 interface RefreshResponseProps {
   accessToken: string;
@@ -13,8 +17,7 @@ export async function middleware(req: NextRequest) {
     res.cookies.delete(authTestConfig.accessToken);
     res.cookies.delete(authTestConfig.refreshToken);
     return res;
-  }
-  else if (req.nextUrl.pathname.startsWith("/protected")) {
+  } else if (req.nextUrl.pathname.startsWith("/protected")) {
     const token = req.cookies.get(authTestConfig.accessToken)?.value;
     const refreshToken = req.cookies.get(authTestConfig.refreshToken)?.value;
 
@@ -30,21 +33,22 @@ export async function middleware(req: NextRequest) {
         expiresInMins: 30,
       }),
       credentials: "include",
-    })
+    });
 
     if (refreshRequest.ok) {
       const refreshResponse: RefreshResponseProps = await refreshRequest.json();
       const res = NextResponse.next();
       res.cookies.set(authTestConfig.accessToken, refreshResponse.accessToken);
-      res.cookies.set(authTestConfig.refreshToken, refreshResponse.refreshToken);
+      res.cookies.set(
+        authTestConfig.refreshToken,
+        refreshResponse.refreshToken,
+      );
       return res;
-    }
-    else {
+    } else {
       return NextResponse.redirect(new URL("/logout", req.url));
     }
-  }
-  else {
-    return NextResponse.next();
+  } else {
+    return intlMiddleware(req);
   }
 }
 
@@ -57,6 +61,9 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico, sitemap.xml, robots.txt (metadata files)
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)"
-  ]
+    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
+    // Match only internationalized pathnames
+    "/",
+    "/(en|tr)/:path*",
+  ],
 };
